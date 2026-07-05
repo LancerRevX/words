@@ -1,0 +1,19 @@
+services:
+  apache:
+    build: .
+    ports:
+      - ${WORDS_PORT}:80
+    environment:
+      APP_DEBUG: true
+      APP_URL: ${WORDS_URL}
+      ASSET_URL: ${WORDS_URL}
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_DATABASE: words
+      DB_USERNAME: words
+      DB_PASSWORD: words
+  db:
+    image: postgres:18.4
+    environment:
+      POSTGRES_PASSWORD: words
+      POSTGRES_USER: words
