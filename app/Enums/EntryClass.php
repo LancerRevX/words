@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum EntryClass : string
+enum EntryClass: string
 {
     case Noun = 'noun';
     case Verb = 'verb';

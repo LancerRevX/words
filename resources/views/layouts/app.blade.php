@@ -8,9 +8,9 @@
     @livewireStyles
 </head>
 <body class="bg-orange-100">
-    <header class="flex justify-center items-center border-b-2 border-orange-600 bg-orange-400 text-white font-bold text-xl">
+    <a href="{{ route('home') }}" class="flex justify-center items-center border-b-2 border-orange-600 bg-orange-400 text-white font-bold text-xl py-4">
         <h1>Nikita Kirenkov's Words</h1>
-    </header>
+    </a>
     {{ $slot }}
     @livewireScripts
 </body>
