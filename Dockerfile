@@ -7,9 +7,10 @@ RUN composer dump-autoload
 
 FROM node:26 AS node
 WORKDIR /build/
-COPY --from=composer /build/ .
+COPY package.json package-lock.json .
 RUN npm config set registry https://npm-mirror.gitverse.ru
 RUN npm install
+COPY --from=composer /build/ .
 RUN npm run build
 
 FROM php:8.3-apache
