@@ -2,10 +2,10 @@
 
 <div class="p-4">
     <h1 class="mb-4 text-center text-xl">
-        @if (is_null($entry))
-            New entry
-        @else
+        @if ($entry->id)
             Edit entry
+        @else
+            New entry
         @endif
     </h1>
 
@@ -27,6 +27,15 @@
 
     <div class="flex flex-col gap-4">
         <div class="flex gap-4">
+            <label for="language">Language</label>
+            <select class="flex-1 rounded border border-gray-400 bg-white" id="language" name=""
+                wire:model="language">
+                @foreach ($this->languages as $language)
+                    <option value="{{ $language->id }}">{{ Str::ucfirst($language->name) }} </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="flex gap-4">
             <label for="class">Class</label>
             <select class="flex-1 rounded border border-gray-400 bg-white" id="class" name=""
                 wire:model="class">
@@ -37,8 +46,9 @@
         </div>
         <div class="">
             <label class="block" for="spelling">Spelling</label>
-            <input class="w-full rounded border border-gray-400 bg-white" id="spelling" name="" type="text"
-                wire:model="spelling">
+            <input
+                class="@error('spelling') outline-2 outline-red-600 @enderror w-full rounded border border-gray-400 bg-white"
+                id="spelling" name="" type="text" wire:model="spelling">
         </div>
         <div>
             <label class="block" for="pronounciation">Pronounciation</label>
@@ -70,7 +80,8 @@
                     <div class="flex gap-4">
                         <label for="source">Source</label>
                         <select class="flex-1 rounded border border-gray-400 bg-white" id="source" name=""
-                            wire:model="definitions[{{ $i }}].source_id">
+                            wire:model.number="definitions.{{ $i }}.source_id">
+                            <option value="">...</option>
                             @foreach ($this->sources as $source)
                                 <option value="{{ $source->id }}">{{ $source->name }}</option>
                             @endforeach
@@ -78,21 +89,23 @@
                     </div>
                     @if (!empty($definition['examples']))
                         @foreach ($definition['examples'] as $j => $example)
-                            <article class="mb-2 rounded border-2 border-purple-600 bg-purple-200 p-2">
-                                <header class="relative">
-                                    <h3>Example #{{ $loop->iteration }}</h3>
-                                    <button
-                                        class="absolute right-0 top-0 rounded border-2 border-gray-400 bg-gray-200 px-2 py-1"
-                                        wire:click="removeExample({{ $i }}, {{ $j }})"
-                                        wire:confirm="Are you sure?">Remove</button>
-                                </header>
-                                <div>
-                                    <label for="text">Text</label>
-                                    <textarea
-                                        class="@error("definitions.$i.examples.$j.text") outline-2 outline-red-600 @enderror w-full rounded border border-gray-400 bg-white"
-                                        id="text" rows=3 wire:model="definitions.{{ $i }}.examples.{{ $j }}.text"></textarea>
-                                </div>
-                            </article>
+                            @if (!$example['to_delete'])
+                                <article class="mb-2 rounded border-2 border-purple-600 bg-purple-200 p-2">
+                                    <header class="relative">
+                                        <h3>Example #{{ $loop->iteration }}</h3>
+                                        <button
+                                            class="absolute right-0 top-0 rounded border-2 border-gray-400 bg-gray-200 px-2 py-1"
+                                            wire:click="removeExample({{ $i }}, {{ $j }})"
+                                            wire:confirm="Are you sure?">Remove</button>
+                                    </header>
+                                    <div>
+                                        <label for="text">Text</label>
+                                        <textarea
+                                            class="@error("definitions.$i.examples.$j.text") outline-2 outline-red-600 @enderror w-full rounded border border-gray-400 bg-white"
+                                            id="text" rows=3 wire:model="definitions.{{ $i }}.examples.{{ $j }}.text"></textarea>
+                                    </div>
+                                </article>
+                            @endif
                         @endforeach
                     @endif
                     <button class="self-center rounded border-2 border-purple-600 bg-purple-200 px-4 py-2"
