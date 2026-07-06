@@ -104,6 +104,17 @@
                                             class="@error("definitions.$i.examples.$j.text") outline-2 outline-red-600 @enderror w-full rounded border border-gray-400 bg-white"
                                             id="text" rows=3 wire:model="definitions.{{ $i }}.examples.{{ $j }}.text"></textarea>
                                     </div>
+                                    <div class="flex gap-4">
+                                        <label for="source">Source</label>
+                                        <select class="flex-1 rounded border border-gray-400 bg-white" id="source"
+                                            name=""
+                                            wire:model.number="definitions.{{ $i }}.examples.{{ $j }}.source_id">
+                                            <option value="">...</option>
+                                            @foreach ($this->sources as $source)
+                                                <option value="{{ $source->id }}">{{ $source->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </article>
                             @endif
                         @endforeach

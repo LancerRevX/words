@@ -56,6 +56,7 @@ class EditEntry extends Component
                 'definitions.*.source_id' => ['exclude_if:definitions.*.to_delete,true', 'nullable', 'integer:strict', 'exists:sources,id'],
                 'definitions.*.examples' => ['array'],
                 'definitions.*.examples.*.text' => ['exclude_if:definitions.*.examples.*.to_delete,true', 'required'],
+                'definitions.*.examples.*.source_id' => ['exclude_if:definitions.*.to_delete,true', 'nullable', 'integer:strict', 'exists:sources,id'],
             ],
             [
                 'definitions' => [
@@ -80,6 +81,7 @@ class EditEntry extends Component
             $definition =
                 $this->entry->definitions()->find($definitionArray['id']) ?? $this->entry->definitions()->make();
             $definition->fill($definitionArray);
+            $definition->source()->associate(Source::find($definitionArray['source_id']));
             $definition->save();
 
             foreach ($definitionArray['examples'] as $exampleArray) {
@@ -91,6 +93,7 @@ class EditEntry extends Component
 
                 $example = $definition->examples()->find($exampleArray['id']) ?? $definition->examples()->make();
                 $example->fill($exampleArray);
+                $example->source()->associate(Source::find($exampleArray['source_id']));
                 $example->save();
             }
         }
@@ -113,7 +116,7 @@ class EditEntry extends Component
         $this->definitions[] = [
             'id' => null,
             'text' => '',
-            'source_id' => $this->sources->first()->id,
+            'source_id' => null,
             'examples' => [],
             'to_delete' => false,
         ];
