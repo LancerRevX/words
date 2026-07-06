@@ -36,18 +36,18 @@ return new class extends Migration
         Schema::create('definitions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('entry_id')->constrained();
+            $table->foreignId('entry_id')->constrained()->onDelete('cascade');
             $table->text('text');
-            $table->foreignId('source_id')->nullable()->constrained();
+            $table->foreignId('source_id')->nullable()->constrained()->onDelete('set null');
             $table->string('image_url')->nullable();
         });
 
         Schema::create('examples', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('definition_id')->constrained();
+            $table->foreignId('definition_id')->constrained()->onDelete('cascade');
             $table->text('text');
-            $table->foreignId('source_id')->nullable()->constrained();
+            $table->foreignId('source_id')->nullable()->constrained()->onDelete('set null');
         });
     }
 

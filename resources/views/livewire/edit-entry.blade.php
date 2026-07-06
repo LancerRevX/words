@@ -117,5 +117,10 @@
             wire:click="addDefinition">New definition</button>
 
         <button class="rounded border-2 border-green-600 bg-green-200 px-4 py-2" wire:click="save">Save</button>
+
+        @if (isset($entry->id))
+            <button class="rounded border-2 border-red-600 bg-red-200 px-4 py-2" wire:click="delete"
+                wire:confirm="Are you sure?">Delete</button>
+        @endif
     </div>
 </div>

@@ -29,7 +29,7 @@ class EditEntry extends Component
     public function mount()
     {
         if ($this->entry) {
-            $this->fill($this->entry->only('spelling', 'pronounciation', 'class', 'language'));
+            $this->fill($this->entry->only('spelling', 'pronounciation', 'class', 'language_id'));
             $this->definitions = $this->entry->definitions()->with('examples')->get()->toArray();
             foreach ($this->definitions as &$definition) {
                 $definition['to_delete'] = false;
@@ -95,8 +95,17 @@ class EditEntry extends Component
             }
         }
 
-        session()->flash('status', 'Post successfully updated.');
+        session()->flash('status', 'Entry successfully saved.');
         // $this->redirect(route('home'));
+    }
+
+    public function delete() {
+        if (!isset($this->entry->id)) {
+            return;
+        }
+
+        $this->entry->delete();
+        $this->redirect(route('home'));
     }
 
     public function addDefinition()
