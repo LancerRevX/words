@@ -29,7 +29,7 @@
         <div class="flex gap-4">
             <label for="language">Language</label>
             <select class="flex-1 rounded border border-gray-400 bg-white" id="language" name=""
-                wire:model="language">
+                wire:model="language_id">
                 @foreach ($this->languages as $language)
                     <option value="{{ $language->id }}">{{ Str::ucfirst($language->name) }} </option>
                 @endforeach

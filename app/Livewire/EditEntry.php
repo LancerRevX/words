@@ -16,7 +16,7 @@ class EditEntry extends Component
 {
     public ?Entry $entry = null;
 
-    public int $language;
+    public int $language_id;
 
     public EntryClass $class = EntryClass::Noun;
 
@@ -38,7 +38,7 @@ class EditEntry extends Component
                 }
             }
         } else {
-            $this->language = $this->languages->first()->id;
+            $this->language_id = $this->languages->first()->id;
             $this->entry = new Entry;
         }
     }
@@ -47,7 +47,7 @@ class EditEntry extends Component
     {
         $this->validate(
             [
-                'language' => ['required', 'exists:languages,id'],
+                'language_id' => ['required', 'exists:languages,id'],
                 'class' => ['required', Rule::enum(EntryClass::class)],
                 'spelling' => ['required'],
                 'definitions' => ['array', 'min:1'],
@@ -67,7 +67,7 @@ class EditEntry extends Component
         );
 
         $this->entry->fill($this->only('class', 'spelling', 'pronounciation'));
-        $this->entry->language()->associate(Language::findOrFail($this->language));
+        $this->entry->language()->associate(Language::findOrFail($this->language_id));
         $this->entry->save();
 
         foreach ($this->definitions as $definitionArray) {
