@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Override;
 
-#[Fillable('spelling')]
+#[Fillable('spelling', 'pronounciation', 'class')]
 class Entry extends Model
 {
     public function language(): BelongsTo
