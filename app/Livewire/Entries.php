@@ -2,33 +2,48 @@
 
 namespace App\Livewire;
 
+use App\Enums\SortType;
 use App\Models\Entry;
 use Illuminate\Database\Eloquent\Collection;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 
 class Entries extends Component
 {
-    public Collection $entries;
-
     #[Url(except: '')]
     public string $query = '';
 
-    public function mount() {
-        $this->entries = Entry::all();
-    }
+    #[Url(except: SortType::AToZ)]
+    public SortType $sortType = SortType::AToZ;
 
-    public function update() {
+    #[Computed]
+    public function entries() {
         if (!empty($this->query)) {
-            $this->entries = Entry::whereLike('spelling', "%{$this->query}%")->get();
+            $builder = Entry::whereLike('spelling', "%{$this->query}%");
         } else {
-            $this->entries = Entry::all();
+            $builder = Entry::select();
         }
+        switch ($this->sortType) {
+            case SortType::AToZ:
+                $builder->orderBy('spelling', 'asc');
+                break;
+            case SortType::ZToA:
+                $builder->orderBy('spelling', 'desc');
+                break;
+            case SortType::Old:
+                $builder->orderBy('created_at', 'asc');
+                break;
+            case SortType::New:
+                $builder->orderBy('created_at', 'desc');
+                break;
+        }
+        return $builder->get();
     }
 
     public function edit(int $id) {
         $entry = Entry::findOrFail($id);
-        $queryParams = [];
+        $queryParams = ['sortType' => $this->sortType];
         if (!empty($this->query)) {
             $queryParams['query'] = $this->query;
         }

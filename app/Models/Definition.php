@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable('text')]
+#[Fillable('text', 'image_url')]
 class Definition extends Model
 {
     public function entry(): BelongsTo

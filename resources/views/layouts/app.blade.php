@@ -9,8 +9,8 @@
     @livewireStyles
 </head>
 
-<body class="bg-orange-100">
-    <a class="flex items-center justify-center border-b-2 border-orange-600 bg-orange-400 py-4 text-xl font-bold text-white"
+<body class="bg-orange-100" x-data x-on:scroll-to-top="$refs.header.scrollIntoView({behavior: 'smooth'})">
+    <a x-ref="header" class="flex items-center justify-center border-b-2 border-orange-600 bg-orange-400 py-4 text-xl font-bold text-white"
         href="{{ route('home') }}">
         <h1>Nikita Kirenkov's Words</h1>
     </a>

@@ -53,6 +53,7 @@ class EditEntry extends Component
                 'definitions' => ['array', 'min:1'],
                 'definitions.*.to_delete' => ['required', 'boolean'],
                 'definitions.*.text' => ['exclude_if:definitions.*.to_delete,true', 'required'],
+                'definitions.*.image_url' => ['exclude_if:definitions.*.to_delete,true', 'nullable', 'url'],
                 'definitions.*.source_id' => ['exclude_if:definitions.*.to_delete,true', 'nullable', 'integer:strict', 'exists:sources,id'],
                 'definitions.*.examples' => ['array'],
                 'definitions.*.examples.*.text' => ['exclude_if:definitions.*.examples.*.to_delete,true', 'required'],
@@ -89,6 +90,8 @@ class EditEntry extends Component
                     Example::destroy($exampleArray['id']);
 
                     continue;
+                } else if ($exampleArray['to_delete']) {
+                    continue;
                 }
 
                 $example = $definition->examples()->find($exampleArray['id']) ?? $definition->examples()->make();
@@ -99,7 +102,7 @@ class EditEntry extends Component
         }
 
         session()->flash('status', 'Entry successfully saved.');
-        $this->dispatch('successfully-saved');
+        $this->dispatch('scroll-to-top');
         // $this->redirect(route('home'));
     }
 
