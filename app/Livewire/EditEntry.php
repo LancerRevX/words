@@ -99,6 +99,7 @@ class EditEntry extends Component
         }
 
         session()->flash('status', 'Entry successfully saved.');
+        $this->dispatch('successfully-saved');
         // $this->redirect(route('home'));
     }
 
@@ -117,6 +118,7 @@ class EditEntry extends Component
             'id' => null,
             'text' => '',
             'source_id' => null,
+            'image_url' => null,
             'examples' => [],
             'to_delete' => false,
         ];

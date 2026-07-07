@@ -11,8 +11,8 @@ class Entries extends Component
 {
     public Collection $entries;
 
-    #[Url()]
-    public string $query;
+    #[Url(except: '')]
+    public string $query = '';
 
     public function mount() {
         $this->entries = Entry::all();
@@ -24,6 +24,16 @@ class Entries extends Component
         } else {
             $this->entries = Entry::all();
         }
+    }
+
+    public function edit(int $id) {
+        $entry = Entry::findOrFail($id);
+        $queryParams = [];
+        if (!empty($this->query)) {
+            $queryParams['query'] = $this->query;
+        }
+        session()->put('back_url', route('home', $queryParams));
+        redirect(route('edit', ['entry' => $entry]));
     }
 
     public function render()
